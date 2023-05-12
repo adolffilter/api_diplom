@@ -53,6 +53,7 @@ public class UserController : ControllerBase
         user.Balance += hours * user.Specialization.Salary;
         user.Hourse += hours;
         _efModel.Entry(user).State = EntityState.Modified;
+        await _efModel.SaveChangesAsync();
         
         return Ok(user.Balance);
     }
