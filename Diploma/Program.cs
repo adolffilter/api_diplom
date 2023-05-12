@@ -62,9 +62,11 @@ void RegisterServices(IServiceCollection services)
                 ValidateIssuerSigningKey = false
             };
         });
-    
+
     services.AddSwaggerGen(c =>
     {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
+
         c.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
         {
             Name = "Authorization",
@@ -76,24 +78,23 @@ void RegisterServices(IServiceCollection services)
         });
 
         c.AddSecurityRequirement(new OpenApiSecurityRequirement
-        {
-            {
-                new OpenApiSecurityScheme{
-                    Reference = new OpenApiReference
+                {
                     {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "bearerAuth"
+                        new OpenApiSecurityScheme{
+                        Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "bearerAuth"
+                            }
+                        }, new string []{}
                     }
-                }, new string []{}
-            }
-        });
-
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
+                });
     });
 }
 
 void Configure(WebApplication app)
 {
+    app.UseAuthentication();
     app.UseAuthorization();
     app.MapControllers();
 }
