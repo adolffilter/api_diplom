@@ -32,11 +32,11 @@ void RegisterServices(IServiceCollection services)
 {
     var builder = new MySqlConnectionStringBuilder
     {
-        Server = "",
+        Server = "cfif31.ru",
         Port = 3306,
-        UserID = "",
-        Password = "",
-        Database = "",
+        UserID = "ISPr24-39_BeluakovDS",
+        Password = "ISPr24-39_BeluakovDS",
+        Database = "ISPr24-39_BeluakovDS_Kwork_Diplom_1",
         CharacterSet = "utf8"
     };
 
@@ -88,7 +88,7 @@ void RegisterServices(IServiceCollection services)
             }
         });
 
-        c.SwaggerDoc("v1", new OpenApiInfo { Title = "DiplomApi", Version = "v1" });
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "Api", Version = "v1" });
     });
 }
 
