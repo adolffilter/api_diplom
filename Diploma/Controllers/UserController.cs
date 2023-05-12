@@ -30,7 +30,9 @@ public class UserController : ControllerBase
             
         var id = Convert.ToInt32(identity.FindFirst("Id")?.Value);
 
-        var user = await _efModel.Users.FindAsync(id);
+        var user = await _efModel.Users
+            .Include(u => u.Specialization)
+            .FirstOrDefaultAsync(u => u.Id == id);
 
         return Ok(user);
     }
