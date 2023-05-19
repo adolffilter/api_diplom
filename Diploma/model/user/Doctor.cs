@@ -9,5 +9,7 @@ namespace Diploma.model.user
         public string? Photo { get; set; } = null;
         [Required] public string Offece { get; set; } = string.Empty;
         public override string Role => "DoctorUser";
+        public virtual List<Recipe> Recipes { get; set; } = new List<Recipe>();
+        public virtual List<Appointment> Appointments { get; set; } = new List<Appointment>();
     }
 }

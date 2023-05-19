@@ -44,8 +44,8 @@ public class UserController : ControllerBase
         _efModel.Users.Add(new User
         {
             Password = userDTO.Password,
-            FirstName = userDTO.FirstName,
-            LastName = userDTO.LastName,
+            Login = userDTO.Login,
+            Police = userDTO.Police
         });
 
         await _efModel.SaveChangesAsync();
@@ -62,9 +62,9 @@ public class UserController : ControllerBase
         _efModel.Doctors.Add(new Doctor
         {
             Password = userDTO.Password,
-            FirstName = userDTO.FirstName,
-            LastName = userDTO.LastName,
-            Offece = userDTO.Offece
+            Offece = userDTO.Offece,
+            Login = userDTO.Login,
+            Police = userDTO.Police
         });
 
         await _efModel.SaveChangesAsync();
@@ -75,7 +75,7 @@ public class UserController : ControllerBase
     [HttpPost("/api/Authorization")]
     public ActionResult<object> Token(AuthorizationDTO authorization)
     {
-        var indentity = GetIdentity(authorization.FirstName, authorization.Password, authorization.LastName);
+        var indentity = GetIdentity(authorization.Login, authorization.Password);
 
         if (indentity == null)
         {
@@ -105,10 +105,10 @@ public class UserController : ControllerBase
     }
     
     [NonAction]
-    public ClaimsIdentity? GetIdentity(string firstName, string password, string lastName)
+    public ClaimsIdentity? GetIdentity(string login, string password)
     {
         var user = _efModel.Users.FirstOrDefault(
-            x => x != null && x.FirstName == firstName && x.Password == password && x.LastName == lastName);
+            x => x != null && x.FirstName == login && x.Password == password);
 
         if (user != null)
         {
