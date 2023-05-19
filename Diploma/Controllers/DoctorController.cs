@@ -3,7 +3,6 @@ using Diploma.model.user;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Numerics;
 using System.Security.Claims;
 
 namespace Diploma.Controllers
@@ -84,8 +83,6 @@ namespace Diploma.Controllers
         public async Task<ActionResult<Doctor>> GetById(int id)
         {
             var doctor = await _efModel.Doctors
-                .Include(u => u.Appointments)
-                    .ThenInclude(u => u.Pacient)
                 .Include(u => u.Post)
                 .FirstOrDefaultAsync(u => u.Id == id);
 
@@ -121,6 +118,39 @@ namespace Diploma.Controllers
             await _efModel.SaveChangesAsync();
 
             return post;
+        }
+
+        [HttpGet("Appointment")]
+        public async Task<ActionResult<List<Appointment>>> GetAllAppointment(
+            int? doctorId, int? pacientId, DateTime? startDate, DateTime? endDate)
+        {
+            IQueryable<Appointment> appointments = _efModel.Appointments
+                .Include(u => u.Doctor)
+                .Include(u => u.Pacient);
+
+            if(doctorId != null)
+            {
+                appointments = appointments.Where(u => u.Doctor.Id == doctorId);
+            }
+
+            if(pacientId != null)
+            {
+                appointments = appointments
+                    .Where(u => u.Pacient != null)
+                    .Where(u => u.Pacient.Id == pacientId);
+            }
+
+            if(startDate != null)
+            {
+                appointments = appointments.Where(u => u.DateTime >= startDate);
+            }
+
+            if(endDate != null)
+            {
+                appointments = appointments.Where(u => u.DateTime <= endDate);
+            }
+
+            return await appointments.ToListAsync();
         }
 
         [Authorize]
@@ -214,12 +244,12 @@ namespace Diploma.Controllers
                 .Include(u => u.Doctor)
                 .Include(u => u.Patient);
 
-            if (doctorId == null)
+            if (doctorId != null)
             {
                 recipes = recipes.Where(u => u.Doctor.Id == doctorId);
             }
 
-            if(patientId == null)
+            if(patientId != null)
             {
                 recipes = recipes.Where(u => u.Patient.Id == patientId);
             }
