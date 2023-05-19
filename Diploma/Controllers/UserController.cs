@@ -45,7 +45,10 @@ public class UserController : ControllerBase
         {
             Password = userDTO.Password,
             Login = userDTO.Login,
-            Police = userDTO.Police
+            Police = userDTO.Police,
+            FirstName = userDTO.FirstName,
+            LastName = userDTO.LastName,
+            MidleName = userDTO.MidleName
         });
 
         await _efModel.SaveChangesAsync();
@@ -64,7 +67,10 @@ public class UserController : ControllerBase
             Password = userDTO.Password,
             Offece = userDTO.Offece,
             Login = userDTO.Login,
-            Police = userDTO.Police
+            Police = userDTO.Police,
+            FirstName = userDTO.FirstName,
+            LastName = userDTO.LastName,
+            MidleName = userDTO.MidleName
         });
 
         await _efModel.SaveChangesAsync();
