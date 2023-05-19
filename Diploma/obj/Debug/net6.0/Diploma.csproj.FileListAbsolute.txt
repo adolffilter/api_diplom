@@ -96,3 +96,4 @@ C:\Users\danbe\Desktop\kwork-free-api\Diploma\obj\Debug\net6.0\scopedcss\bundle\
 C:\Users\danbe\Desktop\kwork-free-api\Diploma\obj\Debug\net6.0\Diploma.csproj.CopyComplete
 C:\Users\danbe\Desktop\kwork-free-api\Diploma\obj\Debug\net6.0\Diploma.genruntimeconfig.cache
 C:\Users\danbe\Desktop\kwork-free-api\Diploma\obj\Debug\net6.0\ref\Diploma.dll
+C:\Users\danbe\Desktop\kwork-free-api\Diploma\bin\Debug\net6.0\SixLabors.ImageSharp.dll

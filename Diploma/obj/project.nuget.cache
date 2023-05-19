@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FMuTWPZ8myZmeel/Yfuq0W2/O1lDmqjYkNQTBA5OPE/COPh9yjASg0OjH+BrgtOTENUuUVG1TNRHhx5GVkwtyg==",
+  "dgSpecHash": "u1Fca4Gyuly+2zME87DkxHHMT+t8xxpuwAvylT6ocnKr+XOoGe2fYXXYz3Lg7GrauGkmFcFE3q+CmFotT+kIhQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\danbe\\Desktop\\kwork-free-api\\Diploma\\Diploma.csproj",
   "expectedPackageFiles": [
@@ -31,6 +31,7 @@
     "C:\\Users\\danbe\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\mysqlconnector\\2.1.2\\mysqlconnector.2.1.2.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\pomelo.entityframeworkcore.mysql\\6.0.2\\pomelo.entityframeworkcore.mysql.6.0.2.nupkg.sha512",
+    "C:\\Users\\danbe\\.nuget\\packages\\sixlabors.imagesharp\\3.0.1\\sixlabors.imagesharp.3.0.1.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\swashbuckle.aspnetcore\\6.2.3\\swashbuckle.aspnetcore.6.2.3.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.2.3\\swashbuckle.aspnetcore.swagger.6.2.3.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.2.3\\swashbuckle.aspnetcore.swaggergen.6.2.3.nupkg.sha512",

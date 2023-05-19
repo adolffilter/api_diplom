@@ -20,15 +20,74 @@ namespace Diploma.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Doctor>>> GetAll()
+        public async Task<ActionResult<List<Doctor>>> GetAll(string? search, int? postId)
         {
-            return await _efModel.Doctors.ToListAsync();
+            IQueryable<Doctor> doctors = _efModel.Doctors.Include(u => u.Post);
+
+            if(search != null)
+            {
+                doctors = doctors.Where(u =>
+                u.FirstName.Contains(search)
+                || u.MidleName.Contains(search) || u.LastName.Contains(search));
+            }
+
+            if (postId != null)
+            {
+                doctors = doctors.Where(u => u.Post.Id == postId);
+            }
+
+            return await doctors.ToListAsync();
+        }
+
+        [Authorize]
+        [HttpPut("{id}")]
+        public async Task<ActionResult> Update(int id, UpdateDoctorDTO dto)
+        {
+            var doctor = await _efModel.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return NotFound();
+
+            var post = await _efModel.PostDoctors.FindAsync(dto.PostId);
+
+            if (post == null)
+                return NotFound();
+
+            doctor.Offece = dto.Offece;
+            doctor.MidleName = dto.MidleName;
+            doctor.LastName = dto.LastName;
+            doctor.FirstName = dto.FirstName;
+            doctor.Post = post;
+
+            _efModel.Entry(doctor).State = EntityState.Modified;
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "AdminUser")]
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var doctor = await _efModel.Doctors.FindAsync(id);
+
+            if (doctor == null)
+                return NotFound();
+
+            _efModel.Doctors.Remove(doctor);
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Doctor>> GetById(int id)
         {
-            var doctor = await _efModel.Doctors.FindAsync(id);
+            var doctor = await _efModel.Doctors
+                .Include(u => u.Appointments)
+                    .ThenInclude(u => u.Pacient)
+                .Include(u => u.Post)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (doctor == null)
                 return NoContent();
@@ -37,21 +96,36 @@ namespace Diploma.Controllers
         }
 
         [HttpGet("Post")]
-        public async Task<ActionResult<List<PostDoctor>>> GetAllPost(int? authorId = null)
+        public async Task<ActionResult<List<PostDoctor>>> GetAllPost(string? search)
         {
-            IQueryable<PostDoctor> posts = _efModel.PostDoctors.Include(u => u.Author);
+            IQueryable<PostDoctor> posts = _efModel.PostDoctors;
 
-            if(authorId != null)
+            if(search != null)
             {
-                posts = posts.Where(u => u.Author.Id == authorId);
+                posts = posts.Where(u => search.Contains(u.Name));
             }
 
             return await posts.ToListAsync();
         }
 
-        [Authorize(Roles = "DoctorUser")]
+        [Authorize(Roles = "AdminUser")]
         [HttpPost("Post")]
-        public async Task<ActionResult<PostDoctor>> DoctorAddPost(string title, string descriptin)
+        public async Task<ActionResult<PostDoctor>> DoctorAddPost(string name)
+        {
+            var post = new PostDoctor
+            {
+                Name = name
+            };
+
+            await _efModel.PostDoctors.AddAsync(post);
+            await _efModel.SaveChangesAsync();
+
+            return post;
+        }
+
+        [Authorize]
+        [HttpPost("{doctorId}/Appointment")]
+        public async Task<ActionResult> AddAppointment(DateTime dateTime, int doctorId)
         {
             var identity = HttpContext.User.Identity as ClaimsIdentity;
 
@@ -60,22 +134,97 @@ namespace Diploma.Controllers
 
             int idUser = Convert.ToInt32(identity.FindFirst("Id").Value);
 
-            var author = await _efModel.Doctors.FindAsync(idUser);
+            var user = await _efModel.Users.FindAsync(idUser);
 
-            if (author == null)
+            if (user == null)
                 return NoContent();
 
-            var post = new PostDoctor
+            var doctor = await _efModel.Doctors.FindAsync(doctorId);
+
+            if (doctor == null)
+                return NoContent();
+           
+            var appointment = new Appointment
             {
-                Title = title,
-                Descriptin = descriptin,
-                Author = author
+                DateTime = dateTime,
+                Doctor = doctor,
+                Pacient = user
             };
 
-            await _efModel.PostDoctors.AddAsync(post);
+            await _efModel.Appointments.AddAsync(appointment);
             await _efModel.SaveChangesAsync();
 
-            return post;
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpDelete("Appointment/{id}")]
+        public async Task<ActionResult> DeleteAppointmentPacient(int id)
+        {
+            var appointment = await _efModel.Appointments.FindAsync(id);
+
+            if (appointment == null)
+                return NoContent();
+
+            _efModel.Appointments.Remove(appointment);
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize(Roles = "DoctorUser")]
+        [HttpPost("Recipe")]
+        public async Task<ActionResult> AddRecipe(int patientid, string medicationText)
+        {
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            if (identity == null)
+                return NotFound();
+
+            int idUser = Convert.ToInt32(identity.FindFirst("Id").Value);
+
+            var doctor = await _efModel.Doctors.FindAsync(idUser);
+
+            if (doctor == null)
+                return NoContent();
+
+            var patient = await _efModel.Users.FindAsync(patientid);
+
+            if (patient == null)
+                return NoContent();
+
+            var recipe = new Recipe
+            {
+                Doctor = doctor,
+                Patient = patient,
+                MedicationText = medicationText
+            };
+
+            await _efModel.Recipes.AddAsync(recipe);
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [HttpGet("Recipe")]
+        public async Task<ActionResult<List<Recipe>>> GetAllRecipe(
+            int? doctorId, int? patientId)
+        {
+            IQueryable<Recipe> recipes = _efModel.Recipes
+                .Include(u => u.Doctor)
+                .Include(u => u.Patient);
+
+            if (doctorId == null)
+            {
+                recipes = recipes.Where(u => u.Doctor.Id == doctorId);
+            }
+
+            if(patientId == null)
+            {
+                recipes = recipes.Where(u => u.Patient.Id == patientId);
+            }
+
+            return await recipes.ToListAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using Diploma.Auth;
 using Diploma.Database;
 using Diploma.model.user;
+using Diploma.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ namespace Diploma.Controllers;
 public class UserController : ControllerBase
 {
     private EfModel _efModel;
+    private ImageRepository imageRepository = new ImageRepository();
 
     public UserController(EfModel model)
     {
@@ -33,6 +35,52 @@ public class UserController : ControllerBase
         var user = await _efModel.Users.FirstOrDefaultAsync(u => u.Id == id);
 
         return Ok(user);
+    }
+
+    [Authorize]
+    [HttpPatch("Photo")]
+    public async Task<ActionResult> UpdatePhoto(IFormFile file)
+    {
+        if (HttpContext.User.Identity is not ClaimsIdentity identity)
+            return NotFound();
+
+        var id = Convert.ToInt32(identity.FindFirst("Id")?.Value);
+
+        var user = await _efModel.Users.FirstOrDefaultAsync(u => u.Id == id);
+
+        if (user == null)
+            return NoContent();
+
+        MemoryStream memoryStream = new MemoryStream();
+        await file.CopyToAsync(memoryStream);
+
+        imageRepository.PostImage(
+            dir: $"resources/users/{id}/photo/",
+            id: id.ToString(),
+            imgBytes: memoryStream.ToArray()
+       );
+
+        user.Photo = $"http://localhost:5000/api/User/{id}/Photo.jpg";
+
+        _efModel.Entry(user).State = EntityState.Modified;
+
+        await _efModel.SaveChangesAsync();
+
+        return Ok();
+    }
+
+    [HttpGet("{id}/Photo.jpg")]
+    public ActionResult GetUserPhoto(int id)
+    {
+        byte[]? file = imageRepository.GetImage(
+            $"resources/users/{id}/photo/",
+            id.ToString()
+        );
+
+        if (file != null)
+            return File(file, "image/jpeg");
+        else
+            return NotFound();
     }
 
     [HttpPost("/api/Registration")]
@@ -56,21 +104,32 @@ public class UserController : ControllerBase
         return Ok();
     }
 
+    [Authorize(Roles = "AdminUser")]
     [HttpPost("/api/Registration/Doctor")]
     public async Task<ActionResult> PostRegistrationDoctor(DoctorRegistrationDTO userDTO)
     {
-        if (userDTO == null)
+        var user = await _efModel.Users.FindAsync(userDTO.UserId);
+
+        if (user == null)
             return BadRequest();
 
-        _efModel.Doctors.Add(new Doctor
+        var post = await _efModel.PostDoctors.FindAsync(userDTO.PostId);
+
+        if (post == null)
+            return BadRequest();
+
+        _efModel.Users.Remove(user);
+        await _efModel.Doctors.AddAsync(new Doctor
         {
-            Password = userDTO.Password,
+            Id = user.Id,
+            Password = user.Password,
             Offece = userDTO.Offece,
-            Login = userDTO.Login,
-            Police = userDTO.Police,
-            FirstName = userDTO.FirstName,
-            LastName = userDTO.LastName,
-            MidleName = userDTO.MidleName
+            Login = user.Login,
+            Police = user.Police,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            MidleName = user.MidleName,
+            Post = post
         });
 
         await _efModel.SaveChangesAsync();

@@ -11,6 +11,7 @@ public class User
     [Required] public string MidleName { get; set; } = string.Empty;
     [Required] public string Password { get; set; } = string.Empty;
     [Required] public string Police { get; set; } = string.Empty;
+    public string? Photo { get; set; } = null;
     public virtual List<Appointment> Appointments { get; set; } = new List<Appointment>();
     public virtual List<Recipe> Recipes { get; set; } = new List<Recipe>();
     public virtual string Role => "BaseUser";

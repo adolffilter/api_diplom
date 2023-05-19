@@ -7,6 +7,6 @@ namespace Diploma.model.user
         [Key] public int Id { get; set; }
         [Required] public Doctor Doctor { get; set; } = new Doctor();
         [Required] public User Patient { get; set; } = new User();
-        [Required] public Medication Medication { get; set; } = new Medication();
+        [Required] public string MedicationText { get; set; } = string.Empty;
     }
 }
