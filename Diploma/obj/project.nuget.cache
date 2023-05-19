@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "inRVD/sBuLeFDISBgkeqa9TIbzugNr3HPWl1xU08bAkGFBv092ddL953yvOeGGlTfrwjPoyGvNuM1C05tiBM/w==",
+  "dgSpecHash": "FMuTWPZ8myZmeel/Yfuq0W2/O1lDmqjYkNQTBA5OPE/COPh9yjASg0OjH+BrgtOTENUuUVG1TNRHhx5GVkwtyg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\danbe\\source\\repos\\kwork\\Diploma\\Diploma\\Diploma\\Diploma.csproj",
+  "projectFilePath": "C:\\Users\\danbe\\Desktop\\kwork-free-api\\Diploma\\Diploma.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\danbe\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.16\\microsoft.aspnetcore.authentication.jwtbearer.6.0.16.nupkg.sha512",

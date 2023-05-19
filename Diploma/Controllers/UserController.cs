@@ -30,32 +30,9 @@ public class UserController : ControllerBase
             
         var id = Convert.ToInt32(identity.FindFirst("Id")?.Value);
 
-        var user = await _efModel.Users
-            .Include(u => u.Specialization)
-            .FirstOrDefaultAsync(u => u.Id == id);
+        var user = await _efModel.Users.FirstOrDefaultAsync(u => u.Id == id);
 
         return Ok(user);
-    }
-
-    [Authorize]
-    [HttpPost("Balance")]
-    public async Task<ActionResult<int>> PostBalance(int hours)
-    {
-        if (HttpContext.User.Identity is not ClaimsIdentity identity)
-            return NotFound();
-            
-        var id = Convert.ToInt32(identity.FindFirst("Id")?.Value);
-
-        var user = await _efModel.Users
-            .Include(u => u.Specialization)
-            .FirstOrDefaultAsync(u => u.Id == id);
-
-        user.Balance += hours * user.Specialization.Salary;
-        user.Hourse += hours;
-        _efModel.Entry(user).State = EntityState.Modified;
-        await _efModel.SaveChangesAsync();
-        
-        return Ok(user.Balance);
     }
 
     [HttpPost("/api/Registration")]
@@ -64,24 +41,37 @@ public class UserController : ControllerBase
         if (userDTO == null)
             return BadRequest();
 
-        var specialization = await _efModel.Specializations.FindAsync(userDTO.SpecializationId);
-
-        if (specialization == null)
-            return NotFound();
-
         _efModel.Users.Add(new User
         {
             Password = userDTO.Password,
             FirstName = userDTO.FirstName,
             LastName = userDTO.LastName,
-            Specialization = specialization
         });
 
         await _efModel.SaveChangesAsync();
 
         return Ok();
     }
-    
+
+    [HttpPost("/api/Registration/Doctor")]
+    public async Task<ActionResult> PostRegistrationDoctor(DoctorRegistrationDTO userDTO)
+    {
+        if (userDTO == null)
+            return BadRequest();
+
+        _efModel.Doctors.Add(new Doctor
+        {
+            Password = userDTO.Password,
+            FirstName = userDTO.FirstName,
+            LastName = userDTO.LastName,
+            Offece = userDTO.Offece
+        });
+
+        await _efModel.SaveChangesAsync();
+
+        return Ok();
+    }
+
     [HttpPost("/api/Authorization")]
     public ActionResult<object> Token(AuthorizationDTO authorization)
     {
@@ -108,6 +98,7 @@ public class UserController : ControllerBase
         {
             access_token = encodedJwt,
             username = indentity.Name,
+            role = indentity.FindFirst(ClaimsIdentity.DefaultRoleClaimType).Value
         };
 
         return response;
