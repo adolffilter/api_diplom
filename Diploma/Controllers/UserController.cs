@@ -23,6 +23,33 @@ public class UserController : ControllerBase
         _efModel = model;
     }
 
+    [Authorize]
+    [HttpPut]
+    public async Task<ActionResult<User>> UpdateUser(UpdateUserDto dto)
+    {
+        if (HttpContext.User.Identity is not ClaimsIdentity identity)
+            return NotFound();
+
+        var id = Convert.ToInt32(identity.FindFirst("Id")?.Value);
+
+        var user = await _efModel.Users.FindAsync(id);
+
+        if (user == null)
+            return NotFound();
+
+        user.Login = dto.Login;
+        user.FirstName = dto.FirstName;
+        user.LastName = dto.LastName;
+        user.MidleName = dto.MidleName;
+        user.Police = dto.Police;
+
+        _efModel.Entry(user).State = EntityState.Modified;
+        await _efModel.SaveChangesAsync();
+
+        return user;
+
+    }
+
     //[Authorize(Roles = "AdminUser")]
     [HttpGet("/api/Users")]
     public async Task<ActionResult<List<User>>> GetUsers(string? search, string? role)

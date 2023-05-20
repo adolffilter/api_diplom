@@ -38,7 +38,7 @@ namespace Diploma.Controllers
             return await doctors.ToListAsync();
         }
 
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult> Update(int id, UpdateDoctorDTO dto)
         {
