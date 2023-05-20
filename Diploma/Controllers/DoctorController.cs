@@ -126,6 +126,7 @@ namespace Diploma.Controllers
         {
             IQueryable<Appointment> appointments = _efModel.Appointments
                 .Include(u => u.Doctor)
+                    .ThenInclude(u => u.Post)
                 .Include(u => u.Pacient);
 
             if(doctorId != null)

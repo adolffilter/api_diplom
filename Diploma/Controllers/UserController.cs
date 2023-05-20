@@ -23,6 +23,27 @@ public class UserController : ControllerBase
         _efModel = model;
     }
 
+    //[Authorize(Roles = "AdminUser")]
+    [HttpGet("/api/Users")]
+    public async Task<ActionResult<List<User>>> GetUsers(string? search, string? role)
+    {
+        IQueryable<User> users = _efModel.Users;
+
+        if(search != null)
+        {
+            users = users.Where(u =>
+                u.FirstName.Contains(search)
+                || u.MidleName.Contains(search) || u.LastName.Contains(search));
+        }
+
+        if(role != null)
+        {
+            users = users.Where(u => u.Role == role);
+        }
+
+        return await users.ToListAsync();
+    }
+
     [Authorize]
     [HttpGet]
     public async Task<ActionResult<User>> Get()
