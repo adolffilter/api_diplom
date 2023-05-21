@@ -1,6 +1,5 @@
 ﻿using Diploma.Database;
 using Diploma.model.provider;
-using Diploma.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +20,8 @@ namespace Diploma.Controllers
         [HttpGet]
         public async Task<List<Provider>> GetAllProvider(string? search)
         {
-            IQueryable<Provider> providers = _efModel.Providers;
+            IQueryable<Provider> providers = _efModel.Providers
+                .Include(u => u.Warehouses);
 
             if(!string.IsNullOrEmpty(search))
             {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Diploma.model.warehouse;
+using System.ComponentModel.DataAnnotations;
 
 namespace Diploma.model.provider
 {
@@ -10,5 +11,6 @@ namespace Diploma.model.provider
         [Required, MaxLength(128)] public string MidleName { get; set; } = string.Empty;
         [Required, MaxLength(16), Phone] public string PhoneNumber { get; set; } = string.Empty;
         [Required, MaxLength(256)] public string Address { get; set; } = string.Empty;
+        public virtual List<Warehouse> Warehouses { get; set; } = new();
     }
 }
