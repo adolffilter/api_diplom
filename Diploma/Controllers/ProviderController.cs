@@ -20,8 +20,7 @@ namespace Diploma.Controllers
         [HttpGet]
         public async Task<List<Provider>> GetAllProvider(string? search)
         {
-            IQueryable<Provider> providers = _efModel.Providers
-                .Include(u => u.Warehouses);
+            IQueryable<Provider> providers = _efModel.Providers;
 
             if(!string.IsNullOrEmpty(search))
             {
@@ -39,15 +38,24 @@ namespace Diploma.Controllers
         [HttpPost]
         public async Task<ActionResult<Provider>> Add(UpdateProviderDTO dto)
         {
+            var user = await _efModel.Users.FindAsync(dto.UserId);
+
+            if (user == null)
+                return NotFound();
+
             var provider = new Provider
             {
-                FirstName = dto.FirstName,
-                LastName = dto.LastName,
-                MidleName = dto.MidleName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                MidleName = user.MidleName,
                 PhoneNumber = dto.PhoneNumber,
-                Address = dto.Address
+                Address = dto.Address,
+                Login = user.Login,
+                Password = user.Password,
+                Photo = user.Photo
             };
 
+            _efModel.Users.Remove(user);
             await _efModel.Providers.AddAsync(provider);
             await _efModel.SaveChangesAsync();
 
@@ -63,9 +71,6 @@ namespace Diploma.Controllers
             if (provider == null)
                 return NotFound();
 
-            provider.FirstName = dto.FirstName;
-            provider.LastName = dto.LastName;
-            provider.MidleName = dto.MidleName;
             provider.PhoneNumber = dto.PhoneNumber;
             provider.Address = dto.Address;
 

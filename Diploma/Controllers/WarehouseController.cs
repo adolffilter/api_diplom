@@ -20,8 +20,7 @@ namespace Diploma.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Warehouse>>> GetAll(string? search)
         {
-            IQueryable<Warehouse> warehouse = _efModel.Warehouses
-                .Include(u => u.Provider);
+            IQueryable<Warehouse> warehouse = _efModel.Warehouses;
 
             if(!string.IsNullOrEmpty(search))
             {
@@ -76,28 +75,6 @@ namespace Diploma.Controllers
                 return NotFound();
 
             _efModel.Warehouses.Remove(warehouse);
-            await _efModel.SaveChangesAsync();
-
-            return Ok();
-        }
-
-        [Authorize]
-        [HttpPost("{warehouseId}/Provider/{providerId}")]
-        public async Task<ActionResult> AddProvier(int warehouseId, int providerId)
-        {
-            var warehouse = await _efModel.Warehouses.FindAsync(warehouseId);
-            
-            if(warehouse == null)
-                return NotFound();
-            
-            var provider = await _efModel.Providers.FindAsync(providerId);
-
-            if (provider == null)
-                return NotFound();
-
-            warehouse.Provider.Add(provider);
-
-            _efModel.Entry(warehouse).State = EntityState.Modified;
             await _efModel.SaveChangesAsync();
 
             return Ok();

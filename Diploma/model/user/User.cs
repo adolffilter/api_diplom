@@ -11,5 +11,5 @@ public class User
     [Required, MaxLength(128)] public string MidleName { get; set; } = string.Empty;
     [Required, MaxLength(128)] public string Password { get; set; } = string.Empty;
     [MaxLength(512)]public string? Photo { get; set; } = null;
-    public virtual string Role => "BaUser";
+    public virtual string Role => "BaseUser";
 }
