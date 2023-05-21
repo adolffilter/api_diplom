@@ -41,7 +41,6 @@ public class UserController : ControllerBase
         user.FirstName = dto.FirstName;
         user.LastName = dto.LastName;
         user.MidleName = dto.MidleName;
-        user.Police = dto.Police;
 
         _efModel.Entry(user).State = EntityState.Modified;
         await _efModel.SaveChangesAsync();
@@ -140,43 +139,9 @@ public class UserController : ControllerBase
         {
             Password = userDTO.Password,
             Login = userDTO.Login,
-            Police = userDTO.Police,
             FirstName = userDTO.FirstName,
             LastName = userDTO.LastName,
             MidleName = userDTO.MidleName
-        });
-
-        await _efModel.SaveChangesAsync();
-
-        return Ok();
-    }
-
-    [Authorize(Roles = "AdminUser")]
-    [HttpPost("/api/Registration/Doctor")]
-    public async Task<ActionResult> PostRegistrationDoctor(DoctorRegistrationDTO userDTO)
-    {
-        var user = await _efModel.Users.FindAsync(userDTO.UserId);
-
-        if (user == null)
-            return BadRequest();
-
-        var post = await _efModel.PostDoctors.FindAsync(userDTO.PostId);
-
-        if (post == null)
-            return BadRequest();
-
-        _efModel.Users.Remove(user);
-        await _efModel.Doctors.AddAsync(new Doctor
-        {
-            Id = user.Id,
-            Password = user.Password,
-            Offece = userDTO.Offece,
-            Login = user.Login,
-            Police = user.Police,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            MidleName = user.MidleName,
-            Post = post
         });
 
         await _efModel.SaveChangesAsync();

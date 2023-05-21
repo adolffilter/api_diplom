@@ -16,10 +16,5 @@ public class EfModel:DbContext
     }
     
     public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Doctor> Doctors { get; set; }
-    public virtual DbSet<PostDoctor> PostDoctors { get; set; }
     public virtual DbSet<Admin> Admins { get; set; }
-    public virtual DbSet<Appointment> Appointments { get; set; }
-    public virtual DbSet<Patient> Patients { get; set; }
-    public virtual DbSet<Recipe> Recipes { get; set; }
 }

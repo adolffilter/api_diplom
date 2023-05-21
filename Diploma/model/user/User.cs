@@ -10,7 +10,6 @@ public class User
     [Required] public string LastName { get; set; } = string.Empty;
     [Required] public string MidleName { get; set; } = string.Empty;
     [Required] public string Password { get; set; } = string.Empty;
-    [Required] public string Police { get; set; } = string.Empty;
     public string? Photo { get; set; } = null;
     public virtual string Role => "PatientUser";
 }
