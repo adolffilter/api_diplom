@@ -47,7 +47,6 @@ public class UserController : ControllerBase
         await _efModel.SaveChangesAsync();
 
         return user;
-
     }
 
     //[Authorize(Roles = "AdminUser")]

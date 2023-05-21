@@ -43,7 +43,7 @@ namespace Diploma.Controllers
         public async Task<ActionResult> Update(int id, UpdateDoctorDTO dto)
         {
             var doctor = await _efModel.Doctors.FindAsync(id);
-
+            
             if (doctor == null)
                 return NotFound();
 
@@ -64,7 +64,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "AdminUser")]
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -189,6 +189,29 @@ namespace Diploma.Controllers
         }
 
         [Authorize]
+        [HttpPut("{doctorId}/Appointment/{id}")]
+        public async Task<ActionResult<Appointment>> UpdateAppointments(int doctorId, int id, DateTime dateTime)
+        {
+            var appointment = await _efModel.Appointments.FindAsync(id);
+
+            if (appointment == null)
+                return NoContent();
+
+            var doctor = await _efModel.Doctors.FindAsync(doctorId);
+
+            if (doctor == null)
+                return NotFound();
+
+            appointment.DateTime = dateTime;
+            appointment.Doctor = doctor;
+
+            _efModel.Entry(appointment).State = EntityState.Modified;
+            await _efModel.SaveChangesAsync();
+
+            return appointment;
+        }
+
+        [Authorize]
         [HttpDelete("Appointment/{id}")]
         public async Task<ActionResult> DeleteAppointmentPacient(int id)
         {
@@ -256,6 +279,44 @@ namespace Diploma.Controllers
             }
 
             return await recipes.ToListAsync();
+        }
+
+        [Authorize(Roles = "DoctorUser")]
+        [HttpPut("Recipe/{id}")]
+        public async Task<ActionResult<Recipe>> UpdateRecipe(int id, UpdateRecipeDto dto)
+        {
+            var recipe = await _efModel.Recipes.FindAsync(id);
+
+            if (recipe == null)
+                return NotFound();
+
+            var patiwnt = await _efModel.Users.FindAsync(dto.PatientId);
+
+            if (patiwnt == null)
+                return NotFound();
+
+            recipe.Patient = patiwnt;
+            recipe.MedicationText = dto.MedicationText;
+
+            _efModel.Entry(recipe).State = EntityState.Modified;
+            await _efModel.SaveChangesAsync();
+
+            return recipe;
+        }
+
+        [Authorize(Roles = "DoctorUser")]
+        [HttpDelete("Recipe/{id}")]
+        public async Task<ActionResult> DeleteRecipr(int id)
+        {
+            var recipe = await _efModel.Recipes.FindAsync(id);
+
+            if (recipe == null)
+                return NotFound();
+
+            _efModel.Recipes.Remove(recipe);
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
         }
     }
 }
