@@ -71,7 +71,7 @@ namespace Diploma.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<ActionResult<Employee>> UpdateProvider(int id, CreateEmployeeDto dto)
+        public async Task<ActionResult<Employee>> UpdateProvider(int id, UpdateEmployeeDto dto)
         {
             var employee = await _efModel.Employees.FindAsync(id);
 

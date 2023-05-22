@@ -36,7 +36,7 @@ namespace Diploma.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Provider>> Add(UpdateProviderDTO dto)
+        public async Task<ActionResult<Provider>> Add(CreateProviderDTO dto)
         {
             var user = await _efModel.Users.FindAsync(dto.UserId);
 
