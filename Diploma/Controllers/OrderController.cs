@@ -32,7 +32,7 @@ namespace Diploma.Controllers
             IQueryable<Order> orders = _efModel.Orders
                 .Include(u => u.Product)
                 .Include(u => u.User)
-                .Include(u => u.User.Id == user.Id);
+                .Where(u => u.User.Id == user.Id);
 
             if (!string.IsNullOrEmpty(search))
             {
