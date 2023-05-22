@@ -17,7 +17,7 @@ namespace Diploma.model.order
         }
         [Required] public Product Product { get; set; } = new();
         [Required] public int Quantity { get; set; }
-        [Required] public DateTime DateTime { get; set; } = DateTime.Now
+        [Required] public DateTime DateTime { get; set; } = DateTime.Now;
         [Required] public User User { get; set; } = new();
     }
 }
