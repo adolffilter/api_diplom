@@ -19,6 +19,6 @@ namespace Diploma.model.supply
         [Required] public Product Product { get; set; } = new();
         [Required] public Provider Provider { get; set; } = new();
         [Required] public Warehouse Warehouse { get; set; } = new();
-        [Required] public DateTime DateTime { get; set; }
+        [Required] public DateTime DateTime { get; set; } = DateTime.Now
     }
 }
