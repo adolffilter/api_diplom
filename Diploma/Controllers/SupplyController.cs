@@ -34,7 +34,7 @@ namespace Diploma.Controllers
             return await supplies.ToListAsync();
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,ProviderUser,AdminUser")]
         [HttpPost]
         public async Task<ActionResult<Supply>> Add(CreateSupplyDto dto)
         {
@@ -67,7 +67,7 @@ namespace Diploma.Controllers
             return supply;
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,ProviderUser,AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Supply>> Update(int id, CreateSupplyDto dto)
         {
@@ -103,7 +103,7 @@ namespace Diploma.Controllers
             return supply;
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,ProviderUser,AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

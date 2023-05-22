@@ -31,7 +31,7 @@ namespace Diploma.Controllers
             return await products.ToListAsync();
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,AdminUser")]
         [HttpPost]
         public async Task<ActionResult<Product>> Add(CreateProductDto dto)
         {
@@ -48,7 +48,7 @@ namespace Diploma.Controllers
             return product;
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Product>> Update(int id, CreateProductDto dto)
         {
@@ -68,7 +68,7 @@ namespace Diploma.Controllers
             return product;
         }
 
-        [Authorize]
+        [Authorize(Roles = "EmployeeUser,AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {

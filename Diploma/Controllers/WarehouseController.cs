@@ -30,7 +30,7 @@ namespace Diploma.Controllers
             return await warehouse.ToListAsync();
         }
 
-        [Authorize]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpPost]
         public async Task<ActionResult<Warehouse>> Add(CreateWarehouseDto dto)
         {
@@ -46,7 +46,7 @@ namespace Diploma.Controllers
             return warehouse;
         }
 
-        [Authorize]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Warehouse>> Update(int id, CreateWarehouseDto dto)
         {
@@ -65,7 +65,7 @@ namespace Diploma.Controllers
             return warehouse;
         }
 
-        [Authorize]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
