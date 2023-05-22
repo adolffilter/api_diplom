@@ -1,5 +1,6 @@
 ﻿using Diploma.model.product;
 using Diploma.model.provider;
+using Diploma.model.warehouse;
 using System.ComponentModel.DataAnnotations;
 
 namespace Diploma.model.supply
@@ -17,6 +18,7 @@ namespace Diploma.model.supply
         }
         [Required] public Product Product { get; set; } = new();
         [Required] public Provider Provider { get; set; } = new();
+        [Required] public Warehouse Warehouse { get; set; } = new();
         [Required] public DateTime DateTime { get; set; }
     }
 }
