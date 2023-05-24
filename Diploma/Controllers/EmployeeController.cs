@@ -86,6 +86,10 @@ namespace Diploma.Controllers
             employee.PhoneNumber = dto.PhoneNumber;
             employee.Address = dto.Address;
             employee.Warehouse = warehouse;
+            employee.FirstName = dto.FirstName;
+            employee.LastName = dto.LastName;
+            employee.MidleName = dto.MidleName;
+            employee.Login = dto.Login;
 
             _efModel.Entry(employee).State = EntityState.Modified;
             await _efModel.SaveChangesAsync();

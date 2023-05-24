@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sICq0WzJxDyWpx01UrYLiuRhTRkZJQJ5N/n61TqPvPxf7zB4R+bF4gojF8mm+b3rUjX2JMgaP4wsYeu6oDiT2w==",
+  "dgSpecHash": "aJQ2PU0TTax4md6sv0Q08Kze2JR/fl6w3bcLGqWiXdg8E+WlotzG6sRL9Fg+UI8+TQLAl6auo8ECPGjOmwl/7A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\danbe\\Desktop\\diplom-voronkov-ea-api\\Diploma\\Diploma.csproj",
+  "projectFilePath": "C:\\Users\\danbe\\Desktop\\diploma-Oborotov-api\\Diploma\\Diploma.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\danbe\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\danbe\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\6.0.16\\microsoft.aspnetcore.authentication.jwtbearer.6.0.16.nupkg.sha512",

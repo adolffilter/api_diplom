@@ -1,4 +1,5 @@
 ﻿using Diploma.Database;
+using Diploma.model.employee;
 using Diploma.model.provider;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -73,6 +74,10 @@ namespace Diploma.Controllers
 
             provider.PhoneNumber = dto.PhoneNumber;
             provider.Address = dto.Address;
+            provider.FirstName = dto.FirstName;
+            provider.LastName = dto.LastName;
+            provider.MidleName = dto.MidleName;
+            provider.Login = dto.Login;
 
             _efModel.Entry(provider).State = EntityState.Modified;
             await _efModel.SaveChangesAsync();
