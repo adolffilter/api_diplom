@@ -1480,11 +1480,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\danbe\\Desktop\\diploma-Oborotov-api\\Diploma\\Diploma.csproj",
+      "projectUniqueName": "C:\\Users\\danbe\\Desktop\\diplomSPr22-33_PankovEA-api\\Diploma\\Diploma.csproj",
       "projectName": "Diploma",
-      "projectPath": "C:\\Users\\danbe\\Desktop\\diploma-Oborotov-api\\Diploma\\Diploma.csproj",
+      "projectPath": "C:\\Users\\danbe\\Desktop\\diplomSPr22-33_PankovEA-api\\Diploma\\Diploma.csproj",
       "packagesPath": "C:\\Users\\danbe\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\danbe\\Desktop\\diploma-Oborotov-api\\Diploma\\obj\\",
+      "outputPath": "C:\\Users\\danbe\\Desktop\\diplomSPr22-33_PankovEA-api\\Diploma\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
