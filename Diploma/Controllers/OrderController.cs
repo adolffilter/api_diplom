@@ -67,7 +67,7 @@ namespace Diploma.Controllers
         }
 
 
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         [HttpPost("{id}/Warehouse")]
         public async Task<ActionResult> CreateOrderWarehouse(int id, WarehouseState state)
         {
@@ -91,7 +91,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         [HttpPatch("Warehouse/{id}/State")]
         public async Task<ActionResult> UpdateWarehouseState(WarehouseState state, int id)
         {
@@ -108,7 +108,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpPost]
         public async Task<ActionResult> Create(CreateOrderDto dto)
         {
@@ -130,7 +130,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Provider>> Update(int id, CreateOrderDto dto)
         {
@@ -154,7 +154,7 @@ namespace Diploma.Controllers
             return provider;
         }
 
-        [Authorize]
+        [Authorize(Roles = "AdminUser")]
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
