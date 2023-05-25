@@ -34,9 +34,9 @@ void RegisterServices(IServiceCollection services)
     {
         Server = "cfif31.ru",
         Port = 3306,
-        UserID = "ISPr22-33_OborotovIS",
-        Password = "ISPr22-33_OborotovIS",
-        Database = "ISPr22-33_OborotovIS_Diplom",
+        UserID = "ISPr22-33_PankovEA",
+        Password = "ISPr22-33_PankovEA",
+        Database = "ISPr22-33_PankovEA_Diplom",
         CharacterSet = "utf8"
     };
 
