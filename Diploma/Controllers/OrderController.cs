@@ -44,7 +44,7 @@ namespace Diploma.Controllers
         }
 
         [HttpGet("Warehouse")]
-        public async Task<List<WarehouseOrder>> GetWarehouseAll(string? search)
+        public async Task<List<WarehouseOrder>> GetWarehouseAll(string? search, WarehouseState? state)
         {
             IQueryable<WarehouseOrder> orders = _efModel.WarehouseOrders
                 .Include(u => u.Provider)
@@ -56,6 +56,11 @@ namespace Diploma.Controllers
 
                 orders = orders.Where(u => u.Description.ToLower().Contains(search)
                 || u.Title.ToLower().Contains(search));
+            }
+
+            if(state != null)
+            {
+                orders = orders.Where(u => u.State == state);
             }
 
             return await orders.ToListAsync();
