@@ -43,6 +43,25 @@ namespace Diploma.Controllers
             return await orders.ToListAsync();
         }
 
+        [HttpGet("Warehouse")]
+        public async Task<List<WarehouseOrder>> GetWarehouseAll(string? search)
+        {
+            IQueryable<WarehouseOrder> orders = _efModel.WarehouseOrders
+                .Include(u => u.Provider)
+                    .ThenInclude(u => u.Post);
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                var q = search.ToLower().Trim();
+
+                orders = orders.Where(u => u.Description.ToLower().Contains(search)
+                || u.Title.ToLower().Contains(search));
+            }
+
+            return await orders.ToListAsync();
+        }
+
+
         [Authorize]
         [HttpPost("{id}/Warehouse")]
         public async Task<ActionResult> CreateOrderWarehouse(int id, WarehouseState state)
