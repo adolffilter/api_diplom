@@ -36,6 +36,12 @@ namespace Diploma.Controllers
             return await providers.ToListAsync();
         }
 
+        [HttpGet("Post")]
+        public async Task<ActionResult<List<ProviderPost>>> GetAllPost()
+        {
+            return await _efModel.ProviderPosts.ToListAsync();
+        }
+
         [Authorize(Roles = "AdminUser")]
         [HttpPost]
         public async Task<ActionResult<Provider>> Add(CreateProviderDTO dto)
