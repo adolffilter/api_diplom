@@ -1,6 +1,7 @@
 ﻿using Diploma.Database;
 using Diploma.model.order;
 using Diploma.model.provider;
+using Diploma.model.warehouse;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,11 +21,16 @@ namespace Diploma.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Order>> GetAllProvider(string? search)
+        public async Task<List<Order>> GetAll(string? search, bool? warehouse)
         {
             IQueryable<Order> orders = _efModel.Orders
                 .Include(u => u.Provider)
                     .ThenInclude(u => u.Post);
+
+            if(warehouse != null)
+            {
+                orders = orders.Where(u => u.Warehouse == warehouse);
+            }
 
             if (!string.IsNullOrEmpty(search))
             {
@@ -35,6 +41,47 @@ namespace Diploma.Controllers
             }
 
             return await orders.ToListAsync();
+        }
+
+        [Authorize]
+        [HttpPost("{id}/Warehouse")]
+        public async Task<ActionResult> CreateOrderWarehouse(int id, WarehouseState state)
+        {
+            var order = await _efModel.Orders.FindAsync(id);
+
+            if (order == null)
+                return NotFound();
+
+            var orderWarehouse = new WarehouseOrder
+            {
+                Id = id,
+                State = state,
+                Title = order.Title,
+                Description = order.Description
+            };
+
+            _efModel.Orders.Remove(order);
+            await _efModel.WarehouseOrders.AddAsync(orderWarehouse);
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPatch("Warehouse/{id}/State")]
+        public async Task<ActionResult> UpdateWarehouseState(WarehouseState state, int id)
+        {
+            var order = await _efModel.WarehouseOrders.FindAsync(id);
+
+            if (order == null)
+                return NotFound();
+
+            order.State = state;
+
+            _efModel.Entry(order).State = EntityState.Modified;
+            await _efModel.SaveChangesAsync();
+
+            return Ok();
         }
 
         [Authorize]

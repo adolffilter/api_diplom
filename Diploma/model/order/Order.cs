@@ -9,5 +9,7 @@ namespace Diploma.model.order
         [Required, MaxLength(256)] public string Title { get; set; } = string.Empty;
         [Required, MaxLength(1080)] public string Description { get; set; } = string.Empty;
         [Required] public Provider Provider { get; set; } = new();
+
+        public virtual bool Warehouse => false;
     }
 }
