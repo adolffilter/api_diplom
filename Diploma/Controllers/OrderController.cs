@@ -130,7 +130,7 @@ namespace Diploma.Controllers
             return Ok();
         }
 
-        [Authorize(Roles = "AdminUser")]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Provider>> Update(int id, CreateOrderDto dto)
         {
@@ -154,7 +154,7 @@ namespace Diploma.Controllers
             return provider;
         }
 
-        [Authorize(Roles = "AdminUser")]
+        [Authorize(Roles = "ProviderUser,AdminUser")]
         [HttpDelete]
         public async Task<ActionResult> Delete(int id)
         {
