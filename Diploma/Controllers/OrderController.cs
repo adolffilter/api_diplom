@@ -27,11 +27,7 @@ namespace Diploma.Controllers
                 .Include(u => u.Provider)
                     .ThenInclude(u => u.Post);
 
-            if(warehouse != null)
-            {
-                orders = orders.Where(u => u.Warehouse == warehouse);
-            }
-
+           
             if (!string.IsNullOrEmpty(search))
             {
                 var q = search.ToLower().Trim();
@@ -40,7 +36,14 @@ namespace Diploma.Controllers
                 || u.Title.ToLower().Contains(search));
             }
 
-            return await orders.ToListAsync();
+            var list = await orders.ToListAsync();
+
+            if (warehouse != null)
+            {
+                list = list.Where(u => u.Warehouse == warehouse).ToList();
+            }
+
+            return list;
         }
 
         [HttpGet("Warehouse")]
